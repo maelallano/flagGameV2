@@ -9,6 +9,8 @@ var flags = document.querySelectorAll('.flags img');
 var gameOverSection = document.getElementById('game-over');
 var restartBtn = document.querySelector('.restartBtn');
 
+var userAnswer
+var answer
 
 // function which end a game 
 var gameOver = () => {
@@ -16,33 +18,40 @@ var gameOver = () => {
 	gameOverSection.classList.toggle('is-open');
 }
 
-var isSuccess = (answer) => {
-var flags = document.querySelectorAll('.flags img');
+var isSuccess = () => {
+	// var flags = document.querySelectorAll('.flags img');
 
 	for (var i = 0; i < flags.length; i++) {
-		console.log(flags[i].src[flags[i].src.length - 6] + flags[i].src[flags[i].src.length - 5])
-		if (flags[i].src[0] === answer) {
-			// return true
+		if (userAnswer === answer) {
+			console.log('success')
+			return true
 		}
 	}
+}
+
+var mixFlags = () => {
+	
 }
 
 // function which start a new game
 var start = () => {
 	var life = 3;
 	var time = 20;
-	var score = 0;
 	var success = false;
-	var answer = 'f';
+	
+	answer = 'fr';
+
+	score = 0;
+	scoreText.textContent = score;
 
 	timeText.textContent = time;
 
 	gameSection.classList.toggle('is-open');
 
+	// setInterval every 1sec
 	var timeInterval = setInterval(function() {
 		time--;
 		timeText.textContent = time;
-		scoreText.textContent = score;
 
 		if (time === 0) {
 			setTimeout(function() {
@@ -51,17 +60,12 @@ var start = () => {
 			}, 500);
 		}
 
-		if (life === 0) {
-			setTimeout(function() {
-				gameOver();
-				clearInterval(timeInterval);
-			}, 500);
-		}
-
-		if (isSuccess(answer)) {
-			score += 1;
-		}
-
+		// if (life === 0) {
+		// 	setTimeout(function() {
+		// 		gameOver();
+		// 		clearInterval(timeInterval);
+		// 	}, 500);
+		// }
 
 	}, 1000);
 }
@@ -75,3 +79,16 @@ restartBtn.addEventListener('click', function() {
 	gameOverSection.classList.toggle('is-open');
 	start();
 })
+
+for (var i = 0; i < flags.length; i++) {
+	answer = 'fr';
+
+	flags[i].addEventListener('click', function() {
+		userAnswer = this.src[this.src.length - 6] + this.src[this.src.length - 5]
+		if (isSuccess(answer)) {
+			userAnswer = '';
+			score += 1;
+			scoreText.textContent = score;
+		}
+	})
+}
