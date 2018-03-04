@@ -11,10 +11,11 @@ var answerText = document.querySelector('.answerText');
 var gameOverSection = document.getElementById('game-over');
 var restartBtn = document.querySelector('.restartBtn');
 
-var userAnswer
-var answer
-var time
-var life
+var userAnswer;
+var answer;
+var time;
+var life;
+var timeInterval;
 
 // function which end a game 
 var gameOver = () => {
@@ -22,6 +23,7 @@ var gameOver = () => {
 	gameOverSection.classList.toggle('is-open');
 }
 
+// function which check wether the flag' clicked is the right one or nah
 var isSuccess = (currentImg) => {
 	for (var i = 0; i < flags.length; i++) {
 		if (userAnswer === answer) {
@@ -42,16 +44,38 @@ var isSuccess = (currentImg) => {
 		currentImg.classList.toggle('is-active');
 
 		if (life === 0) {
+			clearInterval(timeInterval);
 			gameOver()
 		}
 	}
 }
 
+// function which randomize the 4 flags display
+var flagRandomizer = (randomNumbers) => {
+	var checkAllDiff = false;
+
+	while (!checkAllDiff) {
+		var checkAllDiff = true;
+
+		for (var i = 0; i < randomNumbers.length; i++) {
+			for (var j = i+1; j < randomNumbers.length; j++) {
+					if (randomNumbers[i] === randomNumbers[j]) {
+						randomNumbers[i] = Math.floor(Math.random() * flagsArr.length)
+						checkAllDiff = false;
+					}
+			}
+		}
+	}
+
+	return randomNumbers
+}
+
+// function which render a new set of 4 flags
 var mixFlags = () => {
 	var index = Math.floor(Math.random() * flagsArr.length)
 	var colorsAnswerFlag = flagsArr[index]['colors']
 	var answerPlace = Math.floor(Math.random() * 4)
-	var randomNumbers = [];
+	var randomNumbers = [Math.floor(Math.random() * flagsArr.length), Math.floor(Math.random() * flagsArr.length), Math.floor(Math.random() * flagsArr.length), Math.floor(Math.random() * flagsArr.length)];
 
 	answerText.textContent = flagsArr[index]['name'];
 
@@ -60,12 +84,15 @@ var mixFlags = () => {
 	for (var i = 0; i < flags.length; i++) {
 		flags[i].parentNode.classList.remove('is-active');
 		
-		randomNumbers[i] = Math.floor(Math.random() * flagsArr.length)
+		// randomNumbers[i] = Math.floor(Math.random() * flagsArr.length)
 	
-		while (randomNumbers[i] === index) {
+		while (!((randomNumbers[i] !== index) && (flagsArr[randomNumbers[i]]['colors'][0] === colorsAnswerFlag[0]))) {
 			randomNumbers[i] = Math.floor(Math.random() * flagsArr.length)
+			randomNumbers = flagRandomizer(randomNumbers);
 		}
+	}
 
+	for (var i = 0; i < flags.length; i++) {
 		if (i !== answerPlace) {
 			flags[i].src = 'flags/' + flagsArr[randomNumbers[i]]['code'].toLowerCase() + '.svg';
 		} else {
@@ -79,8 +106,6 @@ var start = () => {
 	mixFlags();
 	var success = false;
 	
-	// answer = 'fr';
-
 	score = 0;
 	time = 20;
 	life = 3;
@@ -97,7 +122,7 @@ var start = () => {
 	gameSection.classList.toggle('is-open');
 
 	// setInterval every 1sec
-	var timeInterval = setInterval(function() {
+	timeInterval = setInterval(function() {
 		time--;
 		timeText.textContent = time;
 
@@ -107,14 +132,6 @@ var start = () => {
 				clearInterval(timeInterval);
 			}, 500);
 		}
-
-		// if (life === 0) {
-		// 	setTimeout(function() {
-		// 		gameOver();
-		// 		clearInterval(timeInterval);
-		// 	}, 500);
-		// }
-
 	}, 1000);
 }
 

@@ -71,6 +71,13 @@ body {
     border: 2px solid #000;
     background: none;
     cursor: pointer;
+    transition: ease .4s;
+}
+
+.screen button:hover {
+    color: white;
+    background: black;
+    transition: ease .4s;
 }
 
 #game {
