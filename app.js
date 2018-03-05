@@ -50,7 +50,7 @@ var isSuccess = (currentImg) => {
 	}
 }
 
-// function which randomize the 4 flags display
+// function which randomizes the 4 flags displayed
 var flagRandomizer = (randomNumbers) => {
 	var checkAllDiff = false;
 
@@ -70,7 +70,7 @@ var flagRandomizer = (randomNumbers) => {
 	return randomNumbers
 }
 
-// function which render a new set of 4 flags
+// function which renders a new set of 4 flags
 var mixFlags = () => {
 	var index = Math.floor(Math.random() * flagsArr.length)
 	var colorsAnswerFlag = flagsArr[index]['colors']
@@ -84,9 +84,7 @@ var mixFlags = () => {
 	for (var i = 0; i < flags.length; i++) {
 		flags[i].parentNode.classList.remove('is-active');
 		
-		// randomNumbers[i] = Math.floor(Math.random() * flagsArr.length)
-	
-		while (!((randomNumbers[i] !== index) && (flagsArr[randomNumbers[i]]['colors'][0] === colorsAnswerFlag[0]))) {
+		while (!((randomNumbers[i] !== index) && (flagsArr[randomNumbers[i]]['colors'][0] === colorsAnswerFlag[0] || flagsArr[randomNumbers[i]]['colors'][0] === colorsAnswerFlag[1]))) {
 			randomNumbers[i] = Math.floor(Math.random() * flagsArr.length)
 			randomNumbers = flagRandomizer(randomNumbers);
 		}
@@ -101,7 +99,7 @@ var mixFlags = () => {
 	}
 }
 
-// function which start a new game
+// function which starts a new game
 var start = () => {
 	mixFlags();
 	var success = false;
