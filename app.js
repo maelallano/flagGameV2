@@ -10,15 +10,20 @@ var answerText = document.querySelector('.answerText');
 
 var gameOverSection = document.getElementById('game-over');
 var restartBtn = document.querySelector('.restartBtn');
+var finalScoreText = document.querySelector('.finalScoreText');
 
 var userAnswer;
 var answer;
 var time;
 var life;
 var timeInterval;
+var score;
+
+var flagsArr = flagsArrTrue.slice();
 
 // function which end a game 
 var gameOver = () => {
+	finalScoreText.textContent = '' + score;
 	gameSection.classList.toggle('is-open');
 	gameOverSection.classList.toggle('is-open');
 }
@@ -81,6 +86,8 @@ var mixFlags = () => {
 
 	answer = flagsArr[index]['code'];
 
+	flagsArr.splice(index, 1);
+
 	for (var i = 0; i < flags.length; i++) {
 		flags[i].parentNode.classList.remove('is-active');
 		
@@ -101,6 +108,7 @@ var mixFlags = () => {
 
 // function which starts a new game
 var start = () => {
+	flagsArr = flagsArrTrue.slice();
 	mixFlags();
 	var success = false;
 	
@@ -125,10 +133,8 @@ var start = () => {
 		timeText.textContent = time;
 
 		if (time === 0) {
-			setTimeout(function() {
-				gameOver();
-				clearInterval(timeInterval);
-			}, 500);
+			gameOver();
+			clearInterval(timeInterval);
 		}
 	}, 1000);
 }
@@ -139,6 +145,8 @@ startBtn.addEventListener('click', function() {
 })
 restartBtn.addEventListener('click', function() {
 	gameOverSection.classList.toggle('is-open');
+	flagsArr = flagsArrTrue;
+	console.log(flagsArrTrue);
 	start();
 })
 

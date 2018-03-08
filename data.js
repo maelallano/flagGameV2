@@ -1,4 +1,4 @@
-var flagsArr = [
+var flagsArrTrue = [
  {
   "name": "Albania ",
   "code": "AL",
